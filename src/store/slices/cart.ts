@@ -10,7 +10,12 @@ type UpdateData = {
   color?: string
 }
 
-const initialState: CartType[] = JSON.parse(localStorage.getItem('cart') ?? "[]")
+let initialState: CartType[];
+if (typeof window !== "undefined") {
+  initialState = JSON.parse(window.localStorage.getItem('cartitems') ?? "[]")
+} else {
+  initialState = JSON.parse("[]")
+}
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -19,15 +24,18 @@ export const cartSlice = createSlice({
     add: (state, action: PayloadAction<CartType>) => {
       if (state.findIndex(item => item.productId === action.payload.productId) === -1) {
         state.push(action.payload)
-        toast.success("Product added to caشسيشسيشسيrt!")
-        console.log(state)
-        localStorage.setItem('cart', JSON.stringify(state))
+        toast.success("Product added to cart!")
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem('cartitems', JSON.stringify(state))
+        }
       }
     },
 
     remove: (state, action: PayloadAction<{ id: number }>) => {
       state = state.filter(item => item.productId != action.payload.id)
-      localStorage.setItem('cart', JSON.stringify(state))
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem('cartitems', JSON.stringify(state))
+      }
       toast.warning("Product removed from cart!")
       return state
     },
@@ -41,7 +49,9 @@ export const cartSlice = createSlice({
       } else {
         toast.message("Add to cart first!")
       }
-      localStorage.setItem('cart', JSON.stringify(state))
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem('cartitems', JSON.stringify(state))
+      }
       return state
     },
     
@@ -54,7 +64,9 @@ export const cartSlice = createSlice({
       } else {
         toast.message("Add to cart first!")
       }
-      localStorage.setItem('cart', JSON.stringify(state))
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem('cartitems', JSON.stringify(state))
+      }
       return state
     },
 
@@ -63,7 +75,9 @@ export const cartSlice = createSlice({
       if (i != -1) {
         state[i].color = action.payload.color ?? "Red"
       }
-      localStorage.setItem('cart', JSON.stringify(state))
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem('cartitems', JSON.stringify(state))
+      }
       return state
     },
   },
