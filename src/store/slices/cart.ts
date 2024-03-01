@@ -2,7 +2,6 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { CartType, Product } from "@/types";
 
 import { createSlice } from "@reduxjs/toolkit";
-import { getCookie, setCookie } from 'cookies-next';
 import { toast } from "sonner";
 
 type UpdateData = {
@@ -11,7 +10,7 @@ type UpdateData = {
   color?: string
 }
 
-const initialState: CartType[] = JSON.parse(getCookie('cart') ?? "[]")
+const initialState: CartType[] = JSON.parse(localStorage.getItem('cart') ?? "[]")
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -20,14 +19,15 @@ export const cartSlice = createSlice({
     add: (state, action: PayloadAction<CartType>) => {
       if (state.findIndex(item => item.productId === action.payload.productId) === -1) {
         state.push(action.payload)
-        toast.success("Product added to cart!")
+        toast.success("Product added to caشسيشسيشسيrt!")
+        console.log(state)
+        localStorage.setItem('cart', JSON.stringify(state))
       }
-      setCookie('cart', JSON.stringify(state))
     },
 
     remove: (state, action: PayloadAction<{ id: number }>) => {
       state = state.filter(item => item.productId != action.payload.id)
-      setCookie('cart', JSON.stringify(state))
+      localStorage.setItem('cart', JSON.stringify(state))
       toast.warning("Product removed from cart!")
       return state
     },
@@ -41,7 +41,7 @@ export const cartSlice = createSlice({
       } else {
         toast.message("Add to cart first!")
       }
-      setCookie('cart', JSON.stringify(state))
+      localStorage.setItem('cart', JSON.stringify(state))
       return state
     },
     
@@ -54,7 +54,7 @@ export const cartSlice = createSlice({
       } else {
         toast.message("Add to cart first!")
       }
-      setCookie('cart', JSON.stringify(state))
+      localStorage.setItem('cart', JSON.stringify(state))
       return state
     },
 
@@ -63,6 +63,7 @@ export const cartSlice = createSlice({
       if (i != -1) {
         state[i].color = action.payload.color ?? "Red"
       }
+      localStorage.setItem('cart', JSON.stringify(state))
       return state
     },
   },

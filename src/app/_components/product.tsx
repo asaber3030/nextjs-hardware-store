@@ -29,10 +29,12 @@ export const ProductCard = ({ product, disableActions = false }: ProductCardProp
   const favs = useAppSelector((state) => state.favourites)
   const cart = useAppSelector((state) => state.cart)
 
+  console.log(cart)
+
   const dispatch = useAppDispatch()
 
   return (
-    <div className='relative h-fit'>
+    <div className='relative h-fit'> 
       <div className='p-4 bg-gray-100 rounded-md shadow-sm ring-black/20'>
         <Image src={product.image} alt='Product' width={200} height={100} className='object-contain max-w-[100%] w-[200px] h-[200px] m-auto my-10' />
       </div>
