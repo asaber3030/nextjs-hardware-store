@@ -2,6 +2,8 @@ import { OrderStatus } from "@/types/order"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
+import moment from 'moment'
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -20,4 +22,8 @@ export function formatNumber(number: number, options?: any) {
 export function orderStatusText(orderStatus: number): string {
   const statusText = orderStatus === 0 ? OrderStatus.Ordered : orderStatus === 1 ? OrderStatus.OnWay : orderStatus == 2 ? OrderStatus.Almost : orderStatus === 3 ? OrderStatus.Done : "Undefined"
   return statusText
+}
+
+export function diffForHuman(date: Date) {
+  return moment(date).fromNow()
 }

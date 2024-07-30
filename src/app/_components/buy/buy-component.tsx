@@ -1,52 +1,37 @@
 "use client"
 
+// NextJS
 import Image from "next/image"
 import Link from "next/link"
 
+// Helpers & Actions
 import { getCouponByName } from "@/actions/coupons"
 import { saveOrder, userHaveMainAddress } from "@/actions/user"
 import { formatNumber } from "@/lib/utils"
+import { toast } from "sonner"
+import { remove, changeColor, plus, minus } from "@/store/slices/cart"
 
+// Types
 import { CartType } from "@/types/cart"
 import { Product } from "@/types/product"
 
-import { AlertTriangle, Minus, Plus, ShoppingBasket, Triangle } from "lucide-react"
-
+// Hooks
 import { useUser } from "@/hooks"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/store/store"
 import { useRouter } from "next/navigation"
 
+// Icons + UI Components
+import { AlertTriangle, Check, Minus, Plus, ShoppingBasket, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { toast } from "sonner"
 import { Loader } from "../loader"
+import { Select, SelectContent,  SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
-
-
-import { add, remove, changeColor, plus, minus } from "@/store/slices/cart"
 
 export const CompleteBuyComponent = () => {
 
@@ -57,9 +42,6 @@ export const CompleteBuyComponent = () => {
   const [coupon, setCoupon] = useState("")
   const [couponStatus, setCouponStatus] = useState(false)
 
-  const ids = cart.map(item => item.productId)
-
-  // Queries & Mutations
   const { user, pending } = useUser();
 
   const haveMainAddress = useQuery({
@@ -110,9 +92,9 @@ export const CompleteBuyComponent = () => {
     couponMutation.mutate(coupon)
   }
 
-  if (cart.length === 0) return <CompleteBuyComponent.EmptyState />
-
   if (pending) return <CompleteBuyComponent.Loading />
+
+  if (cart.length === 0) return <CompleteBuyComponent.EmptyState />
 
   return (
     <div className='flex gap-x-6'>
@@ -136,7 +118,7 @@ export const CompleteBuyComponent = () => {
                   src={product.productData.image}
                 />
               </div>
-              <div className='w-full'>
+              <div className='w-full relative'>
                 <h1 className='line-clamp-1 w-fit font-semibold text-xl capitalize hover:underline'><Link href={`/products/${product.productData.id}`}>{product.productData.name}</Link></h1>
                 <p className='text-sm w-fit text-gray-400 hover:underline'><Link href={`/categories/${product.productData.categoryId}`}>{product.productData.category?.name}</Link></p>
                 <p className='text-lg font-bold text-green-700'>{formatNumber(product.productData.price * (product?.qty ?? 1))}</p>
@@ -156,6 +138,9 @@ export const CompleteBuyComponent = () => {
                   <Button onClick={() => dispatch(minus({ product: product?.productData, quantity: 1 }))} className='w-7 h-7' variant='outline' size='icon'><Minus className='w-4 h-4' /></Button>
                   <span className='font-bold text-xs'>{product?.qty}</span>
                   <Button onClick={() => dispatch(plus({ product: product?.productData, quantity: 1 }))} className='w-7 h-7' variant='outline' size='icon'><Plus className='w-4 h-4' /></Button>
+                </div>
+                <div className='absolute right-0 bottom-1'>
+                  <Button onClick={ () => dispatch(remove({ id: product?.productId })) } className='h-8.5 font-bold text-sm px-3' variant='outline'><X className='size-5 mr-2' /> Remove</Button>
                 </div>
               </div>
             </div>
@@ -270,9 +255,13 @@ export const CompleteBuyComponent = () => {
 
 CompleteBuyComponent.EmptyState = () => {
   return (
-    <div className="flex items-center justify-center flex-col w-[800px] rounded-md shadow-md ring-1 ring-gray-200 m-auto bg-gray-100 p-10 py-4 text-center">
+    <div className="flex items-center justify-center flex-col w-[800px] rounded-sm shadow-md ring-1 ring-gray-100 m-auto bg-gray-50 p-10 py-4 text-center">
       <ShoppingBasket className="w-[100px] h-[100px] mb-5" />
-      <h1 className="text-2xl font-bold">Empty Shopping Cart</h1>
+      <h1 className="text-3xl font-bold">You havn't added anything to cart yet!</h1>
+      <div className='flex gap-1 mt-2'>
+        <Link href='/products'><Button><Check className='mr-2' /> Continue Shopping</Button></Link>
+        <Link href='/orders'><Button variant='success'><ShoppingBasket className='mr-2' /> My Orders</Button></Link>
+      </div>
     </div>
   )
 }

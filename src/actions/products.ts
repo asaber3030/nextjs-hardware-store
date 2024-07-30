@@ -1,15 +1,47 @@
 import { useApi } from '@/hooks/useApi'
+
 import axios from 'axios'
 
-export async function getProducts(filter?: string | null, category?: string, brand?: string) {
+export async function getProducts(
+  filter?: string | null, 
+  category?: string, 
+  brand?: string,
+  colors?: string[],
+  range?: number[]
+) {
 
-  let api = '/api/products'
+  let api = '/api/products/test'
 
   return await axios.get(api + `?filter=${filter}` + `${category ? `&category=${category}` : ''}` + `${brand ? `&brand=${brand}` : ''}`).then((data) => {
+    return data.data
+  }).catch(e => {
+    console.log(e.error)
+  })
+}
+
+export async function getProductsPost(
+  filter?: string | null, 
+  category?: string, 
+  brand?: string,
+  colors?: string[],
+  range?: number[]
+) {
+
+  let api = '/api/products/test'
+
+  return await axios.post(api, {
+    query: filter, category, brand, colors, range
+  }).then((data) => {
     console.log(data.data)
     return data.data
   }).catch(e => {
     console.log(e.error)
+  })
+}
+
+export async function getAllProducts() {
+  return await axios.get('/api/products/all').then((data) => {
+    return data.data
   })
 }
 
@@ -31,6 +63,18 @@ export async function getBrands(filter?: string) {
   })
 }
 
+export async function getColors() {
+  return await axios.get(`/api/products/colors`).then((data) => {
+    return data.data
+  })
+}
+
+export async function getMaxAndMin() {
+  return await axios.get(`/api/products/prices`).then((data) => {
+    return data.data
+  })
+}
+
 export async function getProductsIn(ids: number[]) {
   return await axios.post(useApi('products/in'), ids).then((data) => {
     return data.data
@@ -48,4 +92,16 @@ export async function getOffers(take?: string) {
   return await axios.get(useApi('offers')).then((data) => {
     return data.data
   })
+}
+
+
+export async function getProductsByServer(
+  filter?: string | null, 
+  category?: string, 
+  brand?: string,
+  colors?: string[],
+  range?: number[]
+) {
+
+  
 }

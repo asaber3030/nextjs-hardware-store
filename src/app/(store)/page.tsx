@@ -3,22 +3,40 @@ import { BestSellerProducts } from "../_components/home/best-seller";
 import { NewArrivalsProducts } from "../_components/home/new-arrivals";
 import { OffersProducts } from "../_components/home/offers";
 import { AccessoriesProducts } from "../_components/home/accessories";
+import { Product } from "@/types";
 
-const HomePage = () => {
+import prisma from "@/db";
+
+const HomePage = async () => {
+
+  const products = await prisma.product.findMany({
+    orderBy: { id: 'desc' },
+    include: {
+      category: true,
+    },
+    take: 10
+  })
+
+  const accessoriesProducts = await prisma.product.findMany({
+    orderBy: { id: 'desc' },
+    where: { categoryId: 2 },
+    include: {
+      category: true,
+    },
+    take: 10
+  })
 
   return (
     <main>
-
       <ListCategoriesImages />
 
-      <BestSellerProducts />
+      <BestSellerProducts products={products as unknown as Product[]} />
 
-      <NewArrivalsProducts />
+      <NewArrivalsProducts products={products as unknown as Product[]} />
 
-      <OffersProducts />
+      <OffersProducts products={products as unknown as Product[]} />
 
-      <AccessoriesProducts />
-
+      <AccessoriesProducts products={accessoriesProducts as unknown as Product[]} />
     </main>
   );
 }

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
+import { useURL } from "@/hooks"
 
 import {
   Select,
@@ -23,7 +24,6 @@ import {
 
 import { ProductSkeleton } from "@/app/_components/skeleton/product-skeleton"
 import { ProductCard } from "@/app/_components/product"
-import { useURL } from "@/hooks"
 import { EmptyState } from "@/app/_components/empty-state"
 import { Button } from "@/components/ui/button"
 
@@ -39,11 +39,12 @@ const ListAllProdudcts = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam)
   const [selectedBrand, setSelectedBrand] = useState<string | null>(brandParam)
+  
   const search = useRef<HTMLInputElement>(null)
 
   const searchProducts = useQuery({
     queryKey: ['products', { filter: search.current?.value, category: selectedCategory, brand: selectedBrand } ],
-    queryFn: ({ queryKey }) => getProducts(queryKey[1].filter ?? '', queryKey[1].category, queryKey[1].brand)
+    queryFn: ({ queryKey }: any) => getProducts(queryKey[1].filter ?? '', queryKey[1].category, queryKey[1].brand)
   })
 
   const categories = useQuery({

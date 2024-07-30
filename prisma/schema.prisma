@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DEPLOY")
+  url      = env("DATABASE_URL")
 }
 
 model Category {
@@ -64,6 +64,17 @@ model User {
   updatedAt DateTime      @default(now())
   addresses UserAddress[]
   orders    Order[]
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String   @unique
+  email     String
+  phone     String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model UserAddress {

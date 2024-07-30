@@ -29,8 +29,6 @@ export const ProductCard = ({ product, disableActions = false }: ProductCardProp
   const favs = useAppSelector((state) => state.favourites)
   const cart = useAppSelector((state) => state.cart)
 
-  console.log(cart)
-
   const dispatch = useAppDispatch()
 
   return (
@@ -39,9 +37,14 @@ export const ProductCard = ({ product, disableActions = false }: ProductCardProp
         <Image src={product.image} alt='Product' width={200} height={100} className='object-contain max-w-[100%] w-[200px] h-[200px] m-auto my-10' />
       </div>
       <div className='py-2 flex flex-col gap-y-2'>
-        <Link href={`/products/${product.id}`} className='text-lg font-bold capitalize line-clamp-1 hover:underline'>{product.name}</Link>
+        <Link href={`/products/${product.id}`} className='text-lg font-bold capitalize line-clamp-1 hover:underline'> {product.name}</Link>
         <Link href={`/categories/${product.categoryId}`} className='text-xs text-gray-400 flex gap-1 items-center'><Rows4 className='size-4' /> {product?.category?.name}</Link>
         <h3 className='text-sm font-medium line-clamp-3'>{product.description}</h3>
+        <div className='flex gap-2 line-clamp-1 items-center justify-end select-none'>
+          {product.color?.split(',').map((color: string, idx: number) => (
+            <div className='text-xs border border-gray-200 p-2 rounded-md' key={idx}>{color}</div>
+          ))}
+        </div>
         <p className='text-gray-600 font-semibold'><Link href='/'>{product.brand}</Link></p>
         <p className='flex gap-x-2 items-center'>
           <span className='font-bold text-green-700 text-[20px]'>{formatNumber(product.price)}</span>

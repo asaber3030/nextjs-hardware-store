@@ -18,8 +18,8 @@ if (typeof window !== "undefined") {
 }
 
 export const cartSlice = createSlice({
-  name: "cart",
   initialState,
+  name: "cart",
   reducers: {
     add: (state, action: PayloadAction<CartType>) => {
       if (state.findIndex(item => item.productId === action.payload.productId) === -1) {

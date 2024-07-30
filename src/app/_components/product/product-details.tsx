@@ -32,7 +32,7 @@ export const ProductInformationDisplay = ({ product }: Props) => {
   
   const cookies = useCookies()
 
-  const currentCart: CartType[] = JSON.parse(cookies.get('cart') ?? '[]')
+  const currentCart: CartType[] = JSON.parse(localStorage.getItem('cartitems') ?? '[]')
   const productCart = currentCart.find(item => item.productId == product.id)
   const [productQuantity, setProductQuantity] = useState(productCart?.qty ?? 1)
 

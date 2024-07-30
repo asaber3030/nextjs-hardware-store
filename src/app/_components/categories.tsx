@@ -32,12 +32,12 @@ export const Categories = () => {
   return (
     <div className="px-14 py-4 flex justify-between items-center bg-gray-300/30">
       <div className='flex gap-x-6 items-center'>
-        <Link href='/offers' className='font-medium text-lg flex justify-center items-center gap-x-2'>Offers <Badge variant='destructive' className='h-4 font-[10px] rounded-lg'>HOT %</Badge></Link>
-        <Link href='/products' className='font-medium text-lg'>All Products</Link>
+        <Link href='/offers' className='font-medium text-[14px]'>Offers</Link>
+        <Link href='/test-products' className='font-medium text-[14px]'>All Products</Link>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='navbar' className='font-medium text-lg hover:text-black/90'>Browse All Categories</Button>
+            <Button variant='secondary' className='font-medium text-[14px] '>Categories</Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className='w-[350px]'>
@@ -50,6 +50,7 @@ export const Categories = () => {
               <>
                 {categoriesQuery.data.map((item: CategoryType) => (
                   <CategoryItem
+                    key={item.id}
                     href={`/categories/${item.id}`}
                     name={item.name}
                     icon={item.icon}
@@ -80,7 +81,7 @@ const CategoryItem = ({ href, icon, name }: CategoryItemProps) => {
   const router = useRouter()
 
   return (
-    <DropdownMenuItem onClick={() => router.push(href)} className="flex gap-x-6 px-4 items-center">
+    <DropdownMenuItem onClick={() => router.push(href)} className="flex gap-x-8 px-4 items-center">
       <Image width={25} height={25} src={icon} alt='Category pic' />
       <span className='font-bold text-lg'>{name}</span>
     </DropdownMenuItem>

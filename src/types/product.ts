@@ -4,7 +4,7 @@ import { ProductDetailsType } from "./product-details"
 export type Product = {
   id: number,
   name: string,
-  description?: string,
+  description: string,
   price: number,
   offerPrice?: number,
   image: string,
@@ -14,6 +14,6 @@ export type Product = {
   categoryId?: number,
   qty: number,
   category?: CategoryType,
-  productDetails: ProductDetailsType[],
+  productDetails?: ProductDetailsType[],
   editor: string
 }

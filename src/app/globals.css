@@ -87,6 +87,5 @@
 
 @layer utilities {
   .rounded-full {
-    border-radius: 50%;
   }
 }

@@ -3,16 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { HomeSectionDisplay } from "./section";
 import { getNumberOfProducts } from "@/actions/products";
+import { Product } from "@/types";
 
-export const AccessoriesProducts = () => {
-
-  const productsQuery = useQuery({
-    queryKey: ['products', { limit: 15 }],
-    queryFn: ({ queryKey }: any) => getNumberOfProducts(queryKey[1].limit)
-  })
-
+export const AccessoriesProducts = ({ products }: { products: Product[] }) => {
   return (
-    <HomeSectionDisplay bg title='Accessories' products={productsQuery.data?.products} isLoading={productsQuery.isLoading} />
+    <HomeSectionDisplay bg title='Accessories' products={products} isLoading={false} />
   );
 }
  
